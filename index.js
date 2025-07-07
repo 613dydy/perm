@@ -2,7 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const app = express();
 
-// アクセスがあった時にログを記録する
+// ルートにアクセスが来たらログを記録
 app.get('/', (req, res) => {
   const log = {
     ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
@@ -10,11 +10,13 @@ app.get('/', (req, res) => {
     time: new Date().toISOString(),
   };
 
+  // logs.txt に記録
   fs.appendFileSync('logs.txt', JSON.stringify(log) + '\n');
+
   res.send('アクセスが記録されました。');
 });
 
-// ポート設定（Renderでは必要）
+// Renderで必要なポートの設定
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
